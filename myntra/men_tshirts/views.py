@@ -72,7 +72,7 @@ class GetMensTshirts(APIView):
         if typecasted_data["category_name"]:
             filter_kwargs["category_name"] = typecasted_data["category_name"]
         if typecasted_data["brand_name"]:
-            filter_kwargs["brand_name"] = typecasted_data["brand_name"]
+            filter_kwargs["brand_name"] = {"$regex": typecasted_data["brand_name"], "$options": "i"}
         if typecasted_data["price_range"]:
             price_range = typecasted_data["price_range"].split("-")
             min_price, max_price = price_range[0], price_range[1]
@@ -85,7 +85,7 @@ class GetMensTshirts(APIView):
                 return HttpResponse(json.dumps(response))
         if typecasted_data["colour_code"]:
             filter_kwargs["colour_code"] = typecasted_data["colour_code"]
-        if typecasted_data["discount"]:
+        if typecasted_data["discount"] or typecasted_data["discount"]==0:
             try:
                 filter_kwargs["discount"] = {
                     '$gte': typecasted_data["discount"]
